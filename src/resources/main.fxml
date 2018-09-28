@@ -25,6 +25,12 @@
                 <MenuItem fx:id="clearButton" mnemonicParsing="false" text="Очистить" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Дебаг">
+              <items>
+                <MenuItem fx:id="nextStepButton" mnemonicParsing="false" text="Вперед" />
+                  <MenuItem fx:id="prevStepButton" mnemonicParsing="false" text="Назад" />
+              </items>
+            </Menu>
          </menus>
       </MenuBar>
    </top>

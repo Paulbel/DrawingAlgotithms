@@ -1,17 +1,17 @@
 package drawing;
 
+import algotithm.Algorithm;
+import algotithm.BresenhamAlgorithm;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import algotithm.Algorithm;
-import algotithm.BresenhamAlgorithm;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class PixelGridPanel extends GridPane {
-    private Iterator<PixelPanel> pixelPanelIterator;
+    private ListIterator<PixelPanel> pixelPanelIterator;
     private List<PixelPanel> pixelList;
     private Algorithm algorithm;
     private List<Position> selectedList;
@@ -22,7 +22,7 @@ public class PixelGridPanel extends GridPane {
         pixelList = new ArrayList<>();
         algorithm = new BresenhamAlgorithm();
         selectedList = new ArrayList<>();
-        countedPixels = new ArrayList<>();
+
         for (int xIndex = 0; xIndex < width; xIndex++) {
             for (int yIndex = 0; yIndex < height; yIndex++) {
                 PixelPanel pane = new PixelPanel(xIndex, height - yIndex - 1);
@@ -34,6 +34,22 @@ public class PixelGridPanel extends GridPane {
                 pane.setMinWidth(10);
                 this.add(pane, xIndex, yIndex);
             }
+        }
+
+    }
+
+
+    public void prevStep() {
+        if (countedPixels != null && pixelPanelIterator.hasPrevious()) {
+            PixelPanel pixelPanel = pixelPanelIterator.previous();
+            pixelPanel.setStyle("-fx-background-color: #ffffff;");
+        }
+    }
+
+    public void nextStep() {
+        if (countedPixels != null && pixelPanelIterator.hasNext()) {
+            PixelPanel pixelPanel = pixelPanelIterator.next();
+            pixelPanel.setStyle("-fx-background-color: #4286f4;");
         }
 
     }
@@ -58,7 +74,13 @@ public class PixelGridPanel extends GridPane {
     }
 
     public void clearSelectedList() {
-        selectedList = new ArrayList<>();
+        for (Position position : selectedList) {
+            for (PixelPanel pixelPanel : pixelList) {
+                if (pixelPanel.getPosition().equals(position)) {
+                    pixelPanel.setStyle("-fx-background-color: #ffffff;");
+                }
+            }
+        }
     }
 
 
@@ -76,6 +98,9 @@ public class PixelGridPanel extends GridPane {
 
 
     public void executeAlgorithm() {
+        clearSelectedList();
+
+        countedPixels = new ArrayList<>();
         if (selectedList.size() == algorithm.getPointCount()) {
 
 
@@ -89,7 +114,9 @@ public class PixelGridPanel extends GridPane {
             }
 
         }
-        selectedList.clear();
+        this.pixelPanelIterator = countedPixels.listIterator(countedPixels.size() );
+        selectedList = new ArrayList<>();
+
     }
 
 
